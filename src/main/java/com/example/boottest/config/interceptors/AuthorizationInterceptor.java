@@ -8,7 +8,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class MyInterceptor extends HandlerInterceptorAdapter {
+public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     private long startTime, endTime;
     public void setStartTime(long startTime){
         this.startTime = startTime;
@@ -21,7 +21,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception{
-        System.out.println("MyInterceptor prehandler");
+        System.out.println("prehandler");
         if (!handler.getClass().isAssignableFrom(HandlerMethod.class)) {
             System.out.println("cat cast handler to Handlermethod.class");
             return true;

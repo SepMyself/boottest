@@ -1,5 +1,7 @@
 package com.example.boottest.config;
 
+import com.example.boottest.config.interceptors.AuthenticationInterceptor;
+import com.example.boottest.config.interceptors.AuthorizationInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
@@ -10,8 +12,8 @@ import org.springframework.web.util.UrlPathHelper;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //registry.addInterceptor(new AllInterceptor()).addPathPatterns("/**");
-        //registry.addInterceptor(new MyInterceptor()).addPathPatterns("/hello");
+        //registry.addInterceptor(new AuthenticationInterceptor()).addPathPatterns("/**");
+        //registry.addInterceptor(new AuthorizationInterceptor()).addPathPatterns("/hello");
     }
 
     @Override
