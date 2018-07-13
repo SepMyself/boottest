@@ -1,6 +1,7 @@
 package com.example.boottest.config.interceptors;
 
-import com.example.boottest.config.Auth;
+import com.example.boottest.config.Authorize;
+import com.example.boottest.util.TokenInfo;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -9,54 +10,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
-    private long startTime, endTime;
-    public void setStartTime(long startTime){
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(long endTime){
-        this.endTime = endTime;
-    }
-
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception{
-        System.out.println("prehandler");
         if (!handler.getClass().isAssignableFrom(HandlerMethod.class)) {
-            System.out.println("cat cast handler to Handlermethod.class");
-            return true;
-        }
-
-        Auth auth = ((HandlerMethod)handler).getMethod().getAnnotation(Auth.class);
-        if(null == auth){
-            System.out.println("can't find @Auth in this url:" + request.getRequestURI());
-            return true;
-        }
-
-        String admin = auth.user();
-        if(!admin.equals(request.getAttribute("role"))){
-            System.out.println("permission denied");
-            response.setStatus(403);
+            // return with some message
             return false;
         }
 
-        return true;
+        Authorize auth = ((HandlerMethod)handler).getMethod().getAnnotation(Authorize.class);
+        // 无需授权
+        if(null == auth){
+            return true;
+        }
+
+        Object tokenObj = request.getAttribute("tokenInfo");
+        TokenInfo tokenInfo;
+        if(tokenObj instanceof TokenInfo){
+            tokenInfo = (TokenInfo)tokenObj;
+        } else {
+            // 需要授权,但无登录信息
+            // return with some message
+            return false;
+        }
+
+        String respectRole = auth.role();
+        if(!respectRole.equals(tokenInfo.getId() + "")){
+            // return with some message (401)
+            return false;
+        }
+
+        return true;// 只有返回true才会继续向下执行，返回false取消当前请求
     }
-
-    @Override
-    public void postHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
-        System.out.println("执行postHandle方法-->02");
-        super.postHandle(request, response, handler, modelAndView);
-    }
-
-    public void afterCompletion(HttpServletRequest request,
-                                HttpServletResponse response, Object handler,
-                                ModelAndView modelAndView, Exception ex) throws Exception {
-        System.out.println("执行afterCompletion方法-->03");
-        super.afterCompletion(request, response, handler, ex);
-
-    }
-
 }

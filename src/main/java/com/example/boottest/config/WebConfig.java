@@ -12,8 +12,8 @@ import org.springframework.web.util.UrlPathHelper;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //registry.addInterceptor(new AuthenticationInterceptor()).addPathPatterns("/**");
-        //registry.addInterceptor(new AuthorizationInterceptor()).addPathPatterns("/hello");
+        registry.addInterceptor(new AuthenticationInterceptor()).addPathPatterns("/api/**");
+        registry.addInterceptor(new AuthorizationInterceptor()).addPathPatterns("/api/**");
     }
 
     @Override
