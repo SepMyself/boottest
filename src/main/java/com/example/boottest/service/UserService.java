@@ -8,4 +8,5 @@ public interface UserService {
     Integer addUser(User user);
     User findById(Integer id);
     List<User> findAll(int page, int size);
+    User findByUsername(String username);
 }

@@ -1,12 +1,14 @@
 package com.example.boottest.dao.entity;
 
+//import sun.util.resources.Bundles;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Department implements Serializable {
+@Table(name = "role")
+public class Role implements Serializable {
     private static final long serialVersionUID = 2L;
 
     @Id
@@ -16,12 +18,10 @@ public class Department implements Serializable {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "department")
-    private Set<User> users = new HashSet<User>();
+    @OneToMany(mappedBy = "role")
+    private Set<UserRole> userRoleList;
 
-    public Department() {
-    }
-
+    public Role(){}
 
     public Integer getId() {
         return id;
@@ -37,5 +37,13 @@ public class Department implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<UserRole> getUserRoleList() {
+        return userRoleList;
+    }
+
+    public void setUserRoleList(Set<UserRole> userRoleList) {
+        this.userRoleList = userRoleList;
     }
 }

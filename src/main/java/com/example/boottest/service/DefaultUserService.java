@@ -45,4 +45,9 @@ public class DefaultUserService implements UserService {
         long count = pageObject.getTotalElements();
         return pageObject.getContent();
     }
+
+    @Override
+    public User findByUsername(String username){
+        return dao.findByUsername(username);
+    }
 }
