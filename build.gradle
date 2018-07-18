@@ -33,6 +33,15 @@ dependencies {
     compile 'mysql:mysql-connector-java:8.0.11'
     compile 'org.springframework.boot:spring-boot-starter-jdbc:2.0.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.0.3.RELEASE'
+    compile 'io.jsonwebtoken:jjwt:0.9.1'
+    compile 'org.springframework.boot:spring-boot-starter-security:2.0.3.RELEASE'
+
+    //bug fix start
+    runtimeOnly 'com.sun.xml.bind:jaxb-impl:2.3.0.1'
+    runtimeOnly 'javax.xml.bind:jaxb-api:2.3.0'
+    runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:2.3.0.1'
+    runtimeOnly 'javax.activation:activation:1.1.1'
+    // bug fix end
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
