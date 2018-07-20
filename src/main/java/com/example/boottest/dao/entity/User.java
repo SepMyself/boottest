@@ -9,9 +9,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+//param:name表名
 @Entity
-@Table(name = "user")
-@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
+//类名与表名相同, 可不填, 若Entity已经声明亦可不填
+//@Table(name = "user")
+//@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,18 +21,12 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
     private String username;
 
-    @JsonIgnore
-    @Column
     private String password;
 
-    @JsonIgnore
-    @Column
     private String salt;
 
-    @Column
     private byte status;
 
     @Column(name = "create_time")
@@ -42,9 +38,14 @@ public class User implements Serializable {
     @Column(name = "last_password_reset_time")
     private Date lastPasswordResetTime;
 
-    @OneToMany
-    @JoinColumn(name = "id")
-    private Set<UserRole> userRoleList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+//    @OneToOne
+//    @ManyToMany
+//    @JoinColumn(name = "id")
+//    private Set<UserRole> userRoleList;
 
     public User(){}
 
@@ -104,13 +105,13 @@ public class User implements Serializable {
         this.lastLoginTime = lastLoginTime;
     }
 
-    public Set<UserRole> getUserRoleList() {
-        return userRoleList;
-    }
-
-    public void setUserRoleList(Set<UserRole> userRoleList) {
-        this.userRoleList = userRoleList;
-    }
+//    public Set<UserRole> getUserRoleList() {
+//        return userRoleList;
+//    }
+//
+//    public void setUserRoleList(Set<UserRole> userRoleList) {
+//        this.userRoleList = userRoleList;
+//    }
 
     public Date getLastPasswordResetTime() {
         return lastPasswordResetTime;
@@ -118,5 +119,13 @@ public class User implements Serializable {
 
     public void setLastPasswordResetTime(Date lastPasswordResetTime) {
         this.lastPasswordResetTime = lastPasswordResetTime;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

@@ -24,6 +24,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUserDetailsServiceImpl jwtUserDetailsService;
 
+    // TODO:argument
     private String tokenHeader = "Authorization";
     private String tokenHead = "Bearer ";
 

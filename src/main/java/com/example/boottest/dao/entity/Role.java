@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name = "role")
+//@Table(name = "role")
 public class Role implements Serializable {
     private static final long serialVersionUID = 2L;
 
@@ -19,7 +19,7 @@ public class Role implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "role")
-    private Set<UserRole> userRoleList;
+    private Set<User> userList;
 
     public Role(){}
 
@@ -39,11 +39,11 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public Set<UserRole> getUserRoleList() {
-        return userRoleList;
+    public Set<User> getUserList() {
+        return userList;
     }
 
-    public void setUserRoleList(Set<UserRole> userRoleList) {
-        this.userRoleList = userRoleList;
+    public void setUserList(Set<User> userList) {
+        this.userList = userList;
     }
 }

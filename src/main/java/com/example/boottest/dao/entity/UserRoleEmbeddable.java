@@ -8,12 +8,15 @@ import java.io.Serializable;
 public class UserRoleEmbeddable implements Serializable {
     private static final long serialVersionUID = 4L;
 
-    @Column(name = "user_id")
     private Integer userId;
-    @Column(name = "role_id")
     private Integer roleId;
 
     public UserRoleEmbeddable(){}
+
+    public UserRoleEmbeddable(Integer uid, Integer rid){
+        this.userId = uid;
+        this.roleId = rid;
+    }
 
     @Override
     public boolean equals(Object o){
