@@ -5,41 +5,46 @@ import com.example.boottest.dto.UserRegisterDto;
 import com.example.boottest.service.AuthService;
 import com.example.boottest.service.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Response;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private String tokenHeader = "Authorization";
-    private String tokenHead = "Bearer ";
-    @Autowired
+    @Value("${jwt.header}")
+    private String tokenHeader;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
     private AuthService authService;
 
+    public AuthController(AuthService authService){
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     @ResponseBody
-    public String login(@RequestBody UserRegisterDto dto) throws AuthenticationException {
-        final String token = authService.login(dto.getUsername(), dto.getPassword());
-        return token;
+    public String login(@RequestBody UserRegisterDto dto)
+            throws AuthenticationException {
+        return authService.login(dto.getUsername(), dto.getPassword());
     }
 
-    @GetMapping()
+    @GetMapping("/refresh")
     @ResponseBody
-    public String refreshToken(HttpServletRequest request) throws AuthenticationException{
+    public String refreshToken(HttpServletRequest request)
+            throws AuthenticationException{
         String token = request.getHeader(tokenHeader);
-        String refreshToken = authService.refresh(token);
-        return refreshToken;
+        return authService.refresh(token);
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     @ResponseBody
-    public Integer register(@RequestBody UserRegisterDto user) throws AuthenticationException{
+    public Integer register(@RequestBody UserRegisterDto user)
+            throws AuthenticationException{
         return authService.register(user);
     }
 }

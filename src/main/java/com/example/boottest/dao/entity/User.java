@@ -3,51 +3,68 @@ package com.example.boottest.dao.entity;
 import com.example.boottest.util.TimeUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 //param:name表名
 @Entity
 //类名与表名相同, 可不填, 若Entity已经声明亦可不填
 //@Table(name = "user")
 //@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String username;
-
     private String password;
-
     private String salt;
-
     private byte status;
-
     @Column(name = "create_time")
     private Date createTime;
-
     @Column(name = "last_login_time")
     private Date lastLoginTime;
-
-    @Column(name = "last_password_reset_time")
-    private Date lastPasswordResetTime;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "last_password_reset_date")
+    private Date lastPasswordResetDate;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
-//    @OneToOne
-//    @ManyToMany
-//    @JoinColumn(name = "id")
-//    private Set<UserRole> userRoleList;
-
     public User(){}
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        //必须要有role的说，不然会一直不匹配，403
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+
+        return authorities;
+    }
+
+    public boolean isAccountNonExpired(){
+        return true;
+    }
+
+    public boolean isAccountNonLocked(){
+        return true;
+    }
+
+    public boolean isCredentialsNonExpired(){
+        return true;
+    }
+
+    public boolean isEnabled(){
+        return status == (byte)0;
+    }
 
     public Integer getId() {
         return id;
@@ -105,27 +122,19 @@ public class User implements Serializable {
         this.lastLoginTime = lastLoginTime;
     }
 
-//    public Set<UserRole> getUserRoleList() {
-//        return userRoleList;
-//    }
-//
-//    public void setUserRoleList(Set<UserRole> userRoleList) {
-//        this.userRoleList = userRoleList;
-//    }
-
-    public Date getLastPasswordResetTime() {
-        return lastPasswordResetTime;
-    }
-
-    public void setLastPasswordResetTime(Date lastPasswordResetTime) {
-        this.lastPasswordResetTime = lastPasswordResetTime;
-    }
-
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Date getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 }

@@ -1,7 +1,5 @@
 package com.example.boottest.config;
 
-import com.example.boottest.dao.repository.UserRepository;
-import com.example.boottest.service.JwtUserDetailsServiceImpl;
 import com.example.boottest.util.Md5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,8 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    public WebSecurityConfig(UserRepository userRepository){
-        this.userDetailsService = new JwtUserDetailsServiceImpl(userRepository);
+    public WebSecurityConfig(UserDetailsService userDetailsService){
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -43,10 +40,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationTokenFilter();
-    }
+    // this code comes form network, but can run correctly
+    // this class is scanned by framework as a component, which will be autowired, if you register this filter
+    // manually, it will be registered twice, so every request will be executed two times.
+//    @Bean
+//    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+//        return new JwtAuthenticationTokenFilter();
+//    }
 
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
@@ -80,20 +80,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对于获取token的rest api要允许匿名访问
                 .antMatchers("/api/auth/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
 
                 //.and()
                 ;
-        http
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+//        http
+//                //new JwtAuthenticationTokenFilter(), 解决spring security自定义filter重复执行问题
+//                //https://segmentfault.com/a/1190000012173419
+//                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
         // 禁用缓存
         http.headers().cacheControl();
 
-    }
-
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 }

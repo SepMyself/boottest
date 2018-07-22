@@ -1,5 +1,8 @@
 package com.example.boottest.util;
 
+import com.example.boottest.dao.entity.User;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.util.Random;
 
 public class CommonUtil {
@@ -15,5 +18,10 @@ public class CommonUtil {
 
     public static String getSalt(int length) {
         return getRandomString(length);
+    }
+
+    public static User getUserFromToken(){
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return user;
     }
 }

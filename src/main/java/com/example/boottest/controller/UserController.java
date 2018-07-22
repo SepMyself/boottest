@@ -1,24 +1,26 @@
 package com.example.boottest.controller;
 
-import com.example.boottest.config.CustomConfig;
 import com.example.boottest.dao.entity.User;
-import com.example.boottest.service.DefaultUserService;
-import com.example.boottest.util.TokenHelper;
+import com.example.boottest.dto.UserRegisterDto;
+import com.example.boottest.service.UserServiceImpl;
+import com.example.boottest.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@PreAuthorize("hasRole('admin')")
+
 public class UserController {
-    private DefaultUserService service;
+    private UserServiceImpl service;
     //private CustomConfig customConfig;
 
     @Autowired
-    public UserController(DefaultUserService service){//, CustomConfig customConfig){
+    public UserController(UserServiceImpl service){//, CustomConfig customConfig){
         this.service = service;
         //this.customConfig = customConfig;
     }
@@ -35,23 +37,19 @@ public class UserController {
         return service.findAll(0, 1);
     }
 
+    @PreAuthorize("hasRole('admin')")
     @GetMapping("/{id}")
     @ResponseBody
-    //@Authorize(role = "admin")
-    public User findById(@PathVariable Integer id){
-        //something wrong
-        //String token = TokenHelper.toToken(null, customConfig.getApiKey());
-        //System.out.println(token);
-
+    public UserRegisterDto findById(@PathVariable Integer id){
         // Test Area Start
-        //System.out.println(5 / 0.0);
-        //System.out.println(-5 / 0.0);
-        //System.out.println(-5 / 0);
-        //System.out.println(-5.1 / 0);
 
-
+        CommonUtil.getUserFromToken().getId();
         // Test Area End
 
-        return service.findById(id);
+        UserRegisterDto dto = new UserRegisterDto();
+        dto.setUsername("delores");
+        dto.setPassword("123456");
+        return dto;
+        //return service.findById(id);
     }
 }

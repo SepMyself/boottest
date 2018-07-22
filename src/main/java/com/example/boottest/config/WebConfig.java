@@ -1,7 +1,5 @@
 package com.example.boottest.config;
 
-import com.example.boottest.config.interceptors.AuthenticationInterceptor;
-import com.example.boottest.config.interceptors.AuthorizationInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
@@ -11,12 +9,6 @@ import org.springframework.web.util.UrlPathHelper;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthenticationInterceptor()).addPathPatterns("/api/**");
-        registry.addInterceptor(new AuthorizationInterceptor()).addPathPatterns("/api/**");
-    }
-
-    @Override
     public void configurePathMatch(PathMatchConfigurer configurer){
         UrlPathHelper urlPathHelper = new UrlPathHelper();
         urlPathHelper.setRemoveSemicolonContent(false);
@@ -25,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry){
-        registry.addMapping("/**").allowedOrigins("*")
+        registry.addMapping("/**")//.allowedOrigins("*")
                 .allowedMethods("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(false).maxAge(3600);
     }
