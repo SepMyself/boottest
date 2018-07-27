@@ -2,12 +2,15 @@ package com.example.boottest.dao.entity;
 
 //import sun.util.resources.Bundles;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 //@Table(name = "role")
+@ApiIgnore
 public class Role implements Serializable {
     private static final long serialVersionUID = 2L;
 
@@ -21,7 +24,8 @@ public class Role implements Serializable {
     @OneToMany(mappedBy = "role")
     private Set<User> userList;
 
-    public Role(){}
+    public Role() {
+    }
 
     public Integer getId() {
         return id;

@@ -25,30 +25,46 @@ repositories {
 
 
 dependencies {
+    //web and devtools
     compile('org.springframework.boot:spring-boot-starter-web')
     compile 'org.springframework.boot:spring-boot-devtools:2.0.3.RELEASE'
+
+    //template
     compile 'org.springframework.boot:spring-boot-starter-freemarker:2.0.3.RELEASE'
     compile 'com.ibeetl:beetl-framework-starter:1.1.57.RELEASE'
+
+    //db
     compile 'com.zaxxer:HikariCP:3.2.0'
     compile 'mysql:mysql-connector-java:8.0.11'
     compile 'org.springframework.boot:spring-boot-starter-jdbc:2.0.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.0.3.RELEASE'
+
+    //jwt
     compile 'io.jsonwebtoken:jjwt:0.9.1'
+
+    //security
     compile 'org.springframework.boot:spring-boot-starter-security:2.0.3.RELEASE'
     compile 'org.apache.commons:commons-lang3:3.7'
 
+    //cache include redis
+    compile 'org.springframework.boot:spring-boot-starter-cache:2.0.3.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-redis:2.0.3.RELEASE'
 
     //bug fix start
     runtimeOnly 'com.sun.xml.bind:jaxb-impl:2.3.0.1'
     runtimeOnly 'javax.xml.bind:jaxb-api:2.3.0'
     runtimeOnly 'org.glassfish.jaxb:jaxb-runtime:2.3.0.1'
     runtimeOnly 'javax.activation:activation:1.1.1'
-    // bug fix end
 
-    // mapstruct
+    //mapstruct, dto and entity mapper
     compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
     compile 'org.mapstruct:mapstruct-processor:1.2.0.Final'
-    //mapstruct
+
+
+    //swagger
+    compile 'io.springfox:springfox-swagger2:2.9.2'
+    compile 'io.springfox:springfox-swagger-ui:2.9.2'
+    compile 'javax.xml.bind:jaxb-api:2.3.0'
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

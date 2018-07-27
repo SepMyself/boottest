@@ -1,12 +1,15 @@
 package com.example.boottest.service;
 
-//import com.example.boottest.dao.UserDao;
-import com.example.boottest.dao.entity.Role;
 import com.example.boottest.dao.entity.User;
 import com.example.boottest.dao.repository.RoleRepository;
 import com.example.boottest.dao.repository.UserRepository;
+import com.example.boottest.dto.UserMapper;
+import com.example.boottest.dto.UserRegisterDto;
 import com.example.boottest.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +20,10 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
+//@CacheConfig(cacheNames = {"user"} )
 public class UserServiceImpl implements UserService, UserDetailsService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
@@ -42,12 +45,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user.getId();
     }
 
-    public User findById(Integer id){
-        //Optional<User> result = dao.findById(id);
-        //return result.get();
-
+    @Cacheable(value = "userById")
+    public UserRegisterDto findById(Integer id){
         User xx = userRepository.getOne(id);
-        return xx;
+        return UserMapper.INSTANCE.entityToDto(xx);
     }
 
     public List<User> findAll(int page, int size){
@@ -57,7 +58,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         long count = pageObject.getTotalElements();
         return pageObject.getContent();
     }
-
 
     public User findByUsername(String username){
         User user = userRepository.findByUsername(username);

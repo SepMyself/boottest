@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.*;
 //类名与表名相同, 可不填, 若Entity已经声明亦可不填
 //@Table(name = "user")
 //@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
+@ApiIgnore
 public class User implements Serializable, UserDetails {
     private static final long serialVersionUID = 1L;
 
