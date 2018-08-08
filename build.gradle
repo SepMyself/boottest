@@ -66,5 +66,7 @@ dependencies {
     compile 'io.springfox:springfox-swagger-ui:2.9.2'
     compile 'javax.xml.bind:jaxb-api:2.3.0'
 
+    //test
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile 'com.ibeetl:xlsunit:1.0.8'
 }

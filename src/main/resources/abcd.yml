@@ -1,0 +1,8 @@
+# log config
+logging:
+    # log path
+    path: ./log
+    level:
+        org.springframework.web:info
+        org.hibernate:error
+    file: log/myspringboot.log

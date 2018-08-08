@@ -37,6 +37,7 @@ public class CacheConfig {
                 .fromSerializer(new JdkSerializationRedisSerializer(this.getClass().getClassLoader()));
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(pair);
         TwoLevelCacheManager cacheManager = new TwoLevelCacheManager(redisTemplate, writer, config);
+
         return cacheManager;
     }
 
